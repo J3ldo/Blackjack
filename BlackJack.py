@@ -24,6 +24,7 @@ class Player:
     def __init__(self):
         self.possible_cards = possible_cards
         self.deck = {"player": [], "dealer": []}
+        self.lost = False
 
         for i in range(2):
             self.deck["player"].append(random.choice(possible_cards))
@@ -47,54 +48,54 @@ class Player:
 
         if self.ppoint > 21:
             print(f"You lost :(. Points: {self.ppoint}")
-            quit()
+            self.lost = True
 
         elif self.ppoint == 21:
             print(f"You win. Points: {self.ppoint}")
-            quit()
+            self.lost = True
 
     def dealergetcard(self):
-        self.deck["dealer"].append(random.choice(possible_cards))
+        while self.dpoint < 17:
+            self.deck["dealer"].append(random.choice(possible_cards))
 
-        self.dpoint = 0
-        for i in range(len(self.deck["dealer"])):
-            self.dpoint += self.deck["dealer"][i][1]
+            self.dpoint = 0
+            for i in range(len(self.deck["dealer"])):
+                self.dpoint += self.deck["dealer"][i][1]
 
         if self.dpoint > 21 or self.dpoint < self.ppoint:
             print(f"You've won! Dealers points: {self.dpoint}")
-            quit()
+            self.lost = True
 
         elif self.dpoint > self.ppoint:
             print(f"You've lost :( Dealers points: {self.dpoint}")
-            quit()
+            self.lost = True
 
         else:
-            print(f"You both have ties. Points: {self.ppoint}")
-            quit()
+            print(f"You have tied. Points: {self.ppoint}")
+            self.lost = True
 
 
 def main():
-    player = Player()
+    while True:
+        print("\n\nStarting new game")
+        player = Player()
 
-    playerdeck = ""
-    for i in player.deck["player"]: playerdeck += f"{i[0]}, "
-    playerdeck = playerdeck[:-2]
+        while not player.lost:
+            playerdeck = ""
+            for i in player.deck["player"]: playerdeck += f"{i[0]}, "
+            playerdeck = playerdeck[:-2]
+            print("Your deck:", playerdeck, "Total:", player.ppoint)
+            print("Your choice: Hit (H) or Stand (S)")
+            choice = input("> ")
 
-    while player.ppoint < 21 or player.dpoint <= 21:
-        print("Your deck:", playerdeck, "Total:", player.ppoint)
-        print("Your choice: Hit (H) or Stand (S)")
-        choice = input("> ")
+            if choice.lower() == "hit" or choice.lower() == "h":
+                player.playergetcard()
 
-        if choice.lower() == "hit" or choice.lower() == "h":
-            player.playergetcard()
+            elif choice.lower() == "stand" or choice.lower() == "s":
+                player.dealergetcard()
 
-        elif choice.lower() == "stand" or choice.lower() == "s":
-            player.dealergetcard()
-
-        else:
-            print("Put in a valid choice!")
-
-    print("You win because you've reached 21 points")
+            else:
+                print("Put in a valid choice!")
 
 
 if __name__ == '__main__':
