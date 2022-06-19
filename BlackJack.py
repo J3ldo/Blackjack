@@ -47,15 +47,15 @@ class Player:
             self.ppoint += self.deck["player"][i][1]
 
         if self.ppoint > 21:
-            print(f"You lost :(. Points: {self.ppoint}")
+            print(f"You've lost :(. Points: {self.ppoint}")
             self.lost = True
 
         elif self.ppoint == 21:
-            print(f"You win. Points: {self.ppoint}")
+            print(f"You've won. Points: {self.ppoint}")
             self.lost = True
 
     def dealergetcard(self):
-        while self.dpoint < 17:
+        while self.dpoint < 16:
             self.deck["dealer"].append(random.choice(possible_cards))
 
             self.dpoint = 0
